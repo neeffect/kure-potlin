@@ -15,26 +15,29 @@ It is not for all kotlin code and projects, only for those that go or want to go
 # Opinions
 
 I think that as of 1560281088: 
- - Opinion: for majority of programmers it is more challenging, slower to write pure functional code  - than imperative one
- - FACT:  there are however those for which functional is easier (seeing `x = x + 1` is killing many brains),
- - Opinion: for short projects (one person - 4 days, two persons one day) imperative, scripting, approach might be more efficient
- - Opinion: the longer the project the more fp and typesafety helps:
+ - for majority of programmers it is more challenging, slower to write pure functional code  - than imperative one
+ - there are however those for which functional is easier (seeing `x = x + 1` is killing many brains),
+ - for short projects (one person - 4 days, two persons one day) imperative, scripting, dynamically typed approach might be more efficient
+ - the longer the project the more fp and type safety helps:
       - immutability reduces risks, needs less comments and communication
-      - type systems extends docs and tests 
-      - the ar emore abstraqctions in fp than in imperative code -  more opportunities for a safe code reuse
-      
-
+      - type systems extend documentations and tests 
+      - there  are more abstractions in fp than in imperative code -  more opportunities for a safe code reuse
 
 
 ## Immutability
  - use `val`
  - do not use `var`
  - use `Vavr.io` - with kotlin goodies
- - use `data classes` with vals and `copy` for a `mutation` (copy with change)
+ - use `data classes` with vals and `copy` operation (copy with change)
+ 
  
  
  ## Functions
   - use '=' to define functions
   - do not use `return` statement
   
-  
+ 
+ ## Data modelling
+- use sealed classes (for ADT)
+- use typealiases
+ 
