@@ -10,6 +10,9 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 class ImpureCode : Rule() {
     override val issue = Issue(
@@ -20,6 +23,19 @@ class ImpureCode : Rule() {
     )
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        bindingContext.takeIf { it != BindingContext.EMPTY }
+            ?.get(BindingContext.FUNCTION, function)
+            ?.returnType
+            ?.takeIf(KotlinType::isUnit)
+            ?.let {
+                val file = function.containingKtFile
+                report(
+                    CodeSmell(
+                        issue, Entity.from(function),
+                        message = "Function ${function.name} in the file ${file.name} returns Unit."
+                    )
+                )
+            }
         super.visitNamedFunction(function)
     }
 
