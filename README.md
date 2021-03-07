@@ -45,3 +45,20 @@ fun pure (y:Int ):Int = y + 1
 ```
 
 
+## Suppressing
+
+If you need to ignore/suppress issues reported by this plugin.
+Just annotate function or class with:
+`@Suppress("ImpureCode")`
+
+(This is a standard `detekt` feature).
+
+
+##  Disclaimer
+
+This plugin will not enforce 100% pure functional programing.
+It only checks for some keywords. If you use some java libraries 
+it will be easily possible to cheat. For instance: `AtomicReference` can be used as variable.
+Use of mutable (java) objects will not be detected.
+The existing java/kotlin ecosystem will also force you to write impure code 
+occasionally.
