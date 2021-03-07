@@ -28,6 +28,13 @@ b) add dependency
 }
 ```
 
+## License
+
+Apache 2.0
+
+[text](license)
+
+
 ## Examples
 ```
 fun impure (y:Int):Int {
