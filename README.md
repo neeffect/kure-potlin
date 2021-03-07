@@ -8,7 +8,8 @@ So far it simply detects:
 
 - use of `var`
 - use of `for`, `while`
-- use of  `return` statement
+- use of `return` statement
+- use of `Unit` as a return type
 
 
 ## Usage
