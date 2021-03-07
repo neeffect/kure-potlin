@@ -1,43 +1,47 @@
-# Kure Potlin
+# kure-potlin
 
-Guide to pure and clean code with Kotlin.
+This is a small plugin to [detekt](https://github.com/detekt/detekt) tool.
+The purpose is to report the potential use of impure language elements in
+kotlin code.
 
-This should be a rule book about dos and don't in kotlin code - written in the pure way.
-It is not for all kotlin code and projects, only for those that go or want to go into kotlin using the  *functional programming*  approach.  
+So far it simply detects:
 
-## Motto
-
-> The more you sweat for the compiler, the less you bleed on production.
-
-<p style='text-align: right;'> One to many </p>
-
-
-# Opinions
-
-I think that as of 1560281088: 
- - for majority of programmers it is more challenging, slower to write pure functional code  - than imperative one
- - there are however those for which functional is easier (seeing `x = x + 1` is killing many brains),
- - for short projects (one person - 4 days, two persons one day) imperative, scripting, dynamically typed approach might be more efficient
- - the longer the project the more fp and type safety helps:
-      - immutability reduces risks, needs less comments and communication
-      - type systems extend documentations and tests 
-      - there  are more abstractions in fp than in imperative code -  more opportunities for a safe code reuse
+- use of `var`
+- use of `for`, `while`
+- use of  `return` statement
 
 
-## Immutability
- - use `val`
- - do not use `var`
- - use `Vavr.io` - with kotlin goodies
- - use `data classes` with vals and `copy` operation (copy with change)
- 
- 
- 
- ## Functions
-  - use '=' to define functions
-  - do not use `return` statement
-  
- 
- ## Data modelling
-- use sealed classes (for ADT)
-- use typealiases
- 
+## Usage
+
+a) Use detect plugin in gradle build
+
+```kotlin
+plugins {
+    id("io.gitlab.arturbosch.detekt").version("1.15.0")
+}
+```
+
+b) add dependency
+```kotlin
+ dependencies {
+        detektPlugins("pl.setblack:kure-potlin:0.1.3")
+}
+```
+
+## Examples
+```
+fun impure (y:Int):Int {
+                    var  x = 1
+                    x = x + y
+                    return x
+                }
+```
+
+Function above will be reported as impure (uses `var` and `return`).
+
+It can be rewritten to a pure version.
+```
+fun pure (y:Int ):Int = y + 1 
+```
+
+
