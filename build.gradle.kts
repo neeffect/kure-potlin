@@ -10,7 +10,7 @@ repositories {
     jcenter()
 }
 
-val componentVersion = "0.2.1"
+val componentVersion = "0.2.2-SNAPSHOT"
 
 dependencies {
     compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.15.0")

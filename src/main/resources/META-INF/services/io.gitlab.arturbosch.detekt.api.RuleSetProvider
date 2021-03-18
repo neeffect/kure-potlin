@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.sample.extensions.ImpureProvider
+pl.setblack.detekt.kurepotlin.ImpureProvider

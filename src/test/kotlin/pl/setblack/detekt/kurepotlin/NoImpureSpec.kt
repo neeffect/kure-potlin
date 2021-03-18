@@ -1,8 +1,8 @@
-package io.gitlab.arturbosch.detekt.sample.extensions
+package pl.setblack.detekt.kurepotlin
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
-import io.gitlab.arturbosch.detekt.sample.extensions.rules.ImpureCode
+import pl.setblack.detekt.kurepotlin.rules.ImpureCode
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat

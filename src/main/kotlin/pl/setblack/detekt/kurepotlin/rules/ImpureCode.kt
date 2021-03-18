@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.sample.extensions.rules
+package pl.setblack.detekt.kurepotlin.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt

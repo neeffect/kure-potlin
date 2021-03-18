@@ -1,6 +1,6 @@
-package io.gitlab.arturbosch.detekt.sample.extensions
+package pl.setblack.detekt.kurepotlin
 
-import io.gitlab.arturbosch.detekt.sample.extensions.rules.ThrowExpression
+import pl.setblack.detekt.kurepotlin.rules.ThrowExpression
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

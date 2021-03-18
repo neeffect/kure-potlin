@@ -1,12 +1,12 @@
-package io.gitlab.arturbosch.detekt.sample.extensions
+package pl.setblack.detekt.kurepotlin
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.sample.extensions.rules.ImpureCode
-import io.gitlab.arturbosch.detekt.sample.extensions.rules.ObjectOrientedClassCode
-import io.gitlab.arturbosch.detekt.sample.extensions.rules.ThrowExpression
-import io.gitlab.arturbosch.detekt.sample.extensions.rules.MutableCollectionsCode
+import pl.setblack.detekt.kurepotlin.rules.ImpureCode
+import pl.setblack.detekt.kurepotlin.rules.ObjectOrientedClassCode
+import pl.setblack.detekt.kurepotlin.rules.ThrowExpression
+import pl.setblack.detekt.kurepotlin.rules.MutableCollectionsCode
 
 
 class ImpureProvider : RuleSetProvider {

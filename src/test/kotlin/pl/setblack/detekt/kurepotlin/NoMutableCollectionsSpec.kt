@@ -1,7 +1,7 @@
-package io.gitlab.arturbosch.detekt.sample.extensions
+package pl.setblack.detekt.kurepotlin
 
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
-import io.gitlab.arturbosch.detekt.sample.extensions.rules.MutableCollectionsCode
+import pl.setblack.detekt.kurepotlin.rules.MutableCollectionsCode
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
