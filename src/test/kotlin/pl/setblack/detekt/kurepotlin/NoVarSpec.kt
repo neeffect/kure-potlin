@@ -3,18 +3,16 @@ package pl.setblack.detekt.kurepotlin
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import pl.setblack.detekt.kurepotlin.rules.VariableUsage
+import pl.setblack.detekt.kurepotlin.rules.VariableDefinition
 
 class NoVarSpec : Spek({
     setupKotlinEnvironment()
 
     describe("a rule") {
 
-        val subject by memoized { VariableUsage() }
-        val env: KotlinCoreEnvironment by memoized()
+        val subject by memoized { VariableDefinition() }
 
         it("should detekt 2 vars") {
             val findings = subject.lint(impureCode)

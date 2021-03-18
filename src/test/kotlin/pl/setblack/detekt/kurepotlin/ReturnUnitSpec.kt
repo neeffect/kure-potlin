@@ -11,11 +11,11 @@ import pl.setblack.detekt.kurepotlin.rules.ReturnUnit
 
 class ReturnUnitSpec : Spek({
     setupKotlinEnvironment()
+    val env: KotlinCoreEnvironment by memoized()
 
     describe("a rule") {
 
         val subject by memoized { ReturnUnit() }
-        val env: KotlinCoreEnvironment by memoized()
 
         it("find returns of Unit") {
             val messages = subject.lintWithContext(env, impureCode).map(Finding::message)

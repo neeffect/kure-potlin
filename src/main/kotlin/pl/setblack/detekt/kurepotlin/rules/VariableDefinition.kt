@@ -9,7 +9,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
 
-class VariableUsage(config: Config = Config.empty) : Rule(config) {
+class VariableDefinition(config: Config = Config.empty) : Rule(config) {
+
+    override val active: Boolean
+        get() = valueOrDefault(Config.ACTIVE_KEY, true)
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.CodeSmell,

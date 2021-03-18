@@ -32,5 +32,7 @@ private const val impureClassesCode: String =
         object Obj
         interface Interface
         sealed class SealedClass
-        enum class EnumClass
+        enum class EnumClass {
+            ENUM
+        }
     """

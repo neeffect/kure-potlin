@@ -14,7 +14,6 @@ class NoReturnStatementSpec : Spek({
     describe("a rule") {
 
         val subject by memoized { ReturnStatement() }
-        val env: KotlinCoreEnvironment by memoized()
 
         it("should detect 1 return statement") {
             val findings = subject.lint(impureCode)

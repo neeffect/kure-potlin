@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import pl.setblack.detekt.kurepotlin.isPureType
 
 class AbstractClassDefinition(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
@@ -19,14 +20,7 @@ class AbstractClassDefinition(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitClass(klass: KtClass) {
-        val isPureType =
-            klass.isData() ||
-                klass.isEnum() ||
-                klass.isInline() ||
-                klass.isInterface() ||
-                klass.isSealed() ||
-                klass.isValue()
-        if (!isPureType && klass.isAbstract()) {
+        if (!klass.isPureType() && klass.isAbstract()) {
             val file = klass.containingKtFile
             report(
                 CodeSmell(

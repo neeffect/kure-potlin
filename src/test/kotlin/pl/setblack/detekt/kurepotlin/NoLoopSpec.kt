@@ -6,15 +6,14 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import pl.setblack.detekt.kurepotlin.rules.LoopUsage
+import pl.setblack.detekt.kurepotlin.rules.LoopDefinition
 
-class NoImpureSpec : Spek({
+class NoLoopSpec : Spek({
     setupKotlinEnvironment()
 
     describe("a rule") {
 
-        val subject by memoized { LoopUsage() }
-        val env: KotlinCoreEnvironment by memoized()
+        val subject by memoized { LoopDefinition() }
 
         it("should detect 2 loops") {
             val findings = subject.lint(impureCode)

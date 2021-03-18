@@ -9,8 +9,13 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import pl.setblack.detekt.kurepotlin.isPureType
 
 class ClassDefinition(config: Config = Config.empty) : Rule(config) {
+
+    override val active: Boolean
+        get() = valueOrDefault(Config.ACTIVE_KEY, true)
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.CodeSmell,
@@ -19,14 +24,7 @@ class ClassDefinition(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitClass(klass: KtClass) {
-        val isPureType =
-            klass.isData() ||
-                klass.isEnum() ||
-                klass.isInline() ||
-                klass.isInterface() ||
-                klass.isSealed() ||
-                klass.isValue()
-        if (!isPureType && !klass.isAbstract()) {
+        if (!klass.isPureType() && !klass.isAbstract()) {
             val file = klass.containingKtFile
             report(
                 CodeSmell(
