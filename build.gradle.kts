@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `maven-publish`
     kotlin("jvm") version "1.4.31"
@@ -9,15 +10,11 @@ repositories {
     jcenter()
 }
 
-val componentVersion = "0.1.3"
+val componentVersion = "0.2.1"
 
 dependencies {
-    // When creating a sample extension, change this dependency to the detekt-api version you build against
-    // e.g. io.gitlab.arturbosch.detekt:detekt-api:1.x.x
     compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.15.0")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.31")
-    // When creating a sample extension, change this dependency to the detekt-test version you build against
-    // e.g. io.gitlab.arturbosch.detekt:detekt-test:1.x.x
     testImplementation("io.gitlab.arturbosch.detekt:detekt-api:1.15.0")
     testImplementation("io.gitlab.arturbosch.detekt:detekt-test:1.15.0")
     testImplementation("org.assertj:assertj-core:3.19.0")
@@ -35,8 +32,8 @@ publishing {
     }
 }
 
-val ossrhUsername: String by project
-val ossrhPassword: String by project
+val ossrhUsername: String? by project
+val ossrhPassword: String? by project
 val signingKey: String? by project
 val signingPassword: String? by project
 
@@ -63,6 +60,13 @@ val dokkaJar by tasks.creating(Jar::class) {
     description = "Assembles Kotlin docs with Dokka"
     archiveClassifier.set("javadoc")
     from(dokka)
+}
+
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions.apply {
+    jvmTarget = "11"
+    javaParameters = true
+    allWarningsAsErrors = true
 }
 
 publishing {

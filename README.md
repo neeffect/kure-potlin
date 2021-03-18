@@ -8,7 +8,10 @@ So far it simply detects:
 
 - use of `var`
 - use of `for`, `while`
-- use of  `return` statement
+- use of `return` statement
+- use of `Unit` as a return type
+- use of `throw`
+- use of mutable collections
 
 
 ## Usage
@@ -24,7 +27,7 @@ plugins {
 b) add dependency
 ```kotlin
  dependencies {
-        detektPlugins("pl.setblack:kure-potlin:0.1.3")
+        detektPlugins("pl.setblack:kure-potlin:0.2.1")
 }
 ```
 
@@ -69,3 +72,15 @@ it will be easily possible to cheat. For instance: `AtomicReference` can be used
 Use of mutable (java) objects will not be detected.
 The existing java/kotlin ecosystem will also force you to write impure code 
 occasionally.
+
+
+## Releases
+
+version 2.1:
+- detects `Unit` (thanks @MiSikora)
+- detects mutable collections (thanks @krzykrucz)
+- detects `throws` (thanks @krzykrucz)
+    and all from version 1.3
+
+version 1.3:
+    detects only `var`, loops and `return`
