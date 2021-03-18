@@ -6,7 +6,7 @@ kotlin code.
 
 ## Detected rules
 
-Rule | Description | Enabled by default | Requires [type resolution](https://detekt.github.io/detekt/type-resolution.html)
+Rule | Detects | Enabled <br /> by default | Requires <br /> [type resolution](https://detekt.github.io/detekt/type-resolution.html)
 --- | --- | --- | ---
 LoopUsage | use of `for`, `while` | :white_check_mark: |
 ReturnStatement | use of `return` statement | :white_check_mark: |
@@ -35,7 +35,7 @@ dependencies {
 }
 ```
 
-c) optionally, you can reconfigure this plugin by adding this to your custom `detekt.yaml`:
+c) optionally, you can reconfigure plugin by adding this to your custom `detekt.yaml`:
 ```yaml
 impure:
   active: true
