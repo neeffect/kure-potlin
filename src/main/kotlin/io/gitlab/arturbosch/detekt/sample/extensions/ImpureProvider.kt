@@ -5,6 +5,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.ImpureCode
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.ThrowExpression
+import io.gitlab.arturbosch.detekt.sample.extensions.rules.MutableCollectionsCode
+
 
 class ImpureProvider : RuleSetProvider {
 
@@ -14,7 +16,8 @@ class ImpureProvider : RuleSetProvider {
         ruleSetId,
         listOf(
             ImpureCode(),
-            ThrowExpression(config)
+            ThrowExpression(config),
+            MutableCollectionsCode(config)
         )
     )
 }
