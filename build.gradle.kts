@@ -14,6 +14,7 @@ val componentVersion = "0.2.1"
 
 dependencies {
     compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.15.0")
+    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.31")
     testImplementation("io.gitlab.arturbosch.detekt:detekt-api:1.15.0")
     testImplementation("io.gitlab.arturbosch.detekt:detekt-test:1.15.0")
     testImplementation("org.assertj:assertj-core:3.19.0")
