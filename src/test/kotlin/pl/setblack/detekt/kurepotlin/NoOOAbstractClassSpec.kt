@@ -1,20 +1,20 @@
 package pl.setblack.detekt.kurepotlin
 
-import pl.setblack.detekt.kurepotlin.rules.ObjectOrientedClassCode
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import pl.setblack.detekt.kurepotlin.rules.ClassDefinition
 
-class NoOOClass : Spek({
+class NoOOAbstractClassSpec : Spek({
 
 
     describe("object-oriented class code rule") {
-        val subject by memoized { ObjectOrientedClassCode() }
+        val subject by memoized { ClassDefinition() }
 
         it("should find impure classes") {
             val findings = subject.lint(impureClassesCode)
-            assertThat(findings).hasSize(3)
+            assertThat(findings).hasSize(2)
         }
     }
 })
@@ -25,6 +25,7 @@ private const val impureClassesCode: String =
         class OOClass
         private class PrivateOOClass
         abstract class AbstractClass
+        private abstract class PrivateAbstractClass
 
         // pure
         data class DataClass(val v: String)
@@ -32,4 +33,5 @@ private const val impureClassesCode: String =
         object Obj
         interface Interface
         sealed class SealedClass
+        enum class EnumClass
     """

@@ -1,10 +1,10 @@
 package pl.setblack.detekt.kurepotlin
 
-import pl.setblack.detekt.kurepotlin.rules.ThrowExpression
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import pl.setblack.detekt.kurepotlin.rules.ThrowExpression
 
 class NoThrowExpressionSpec : Spek({
 

@@ -3,10 +3,10 @@ package pl.setblack.detekt.kurepotlin
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import pl.setblack.detekt.kurepotlin.rules.ClassDefinition
 import pl.setblack.detekt.kurepotlin.rules.ImpureCode
-import pl.setblack.detekt.kurepotlin.rules.ObjectOrientedClassCode
-import pl.setblack.detekt.kurepotlin.rules.ThrowExpression
 import pl.setblack.detekt.kurepotlin.rules.MutableCollectionsCode
+import pl.setblack.detekt.kurepotlin.rules.ThrowExpression
 
 
 class ImpureProvider : RuleSetProvider {
@@ -17,7 +17,7 @@ class ImpureProvider : RuleSetProvider {
         ruleSetId,
         listOf(
             ImpureCode(),
-            ObjectOrientedClassCode(config),
+            ClassDefinition(config),
             ThrowExpression(config),
             MutableCollectionsCode(config)
 

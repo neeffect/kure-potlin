@@ -12,7 +12,8 @@ So far it simply detects:
 - use of `Unit` as a return type
 - use of `throw`
 - use of mutable collections
-
+- use of object-oriented `class`
+- use of object-oriented `abstract class`
 
 ## Usage
 
@@ -25,9 +26,10 @@ plugins {
 ```
 
 b) add dependency
+
 ```kotlin
- dependencies {
-        detektPlugins("pl.setblack:kure-potlin:0.2.1")
+dependencies {
+  detektPlugins("pl.setblack:kure-potlin:0.2.1")
 }
 ```
 
@@ -37,23 +39,23 @@ Apache 2.0
 
 [text](license)
 
-
 ## Examples
-```
-fun impure (y:Int):Int {
-                    var  x = 1
-                    x = x + y
-                    return x
-                }
+
+```kotlin
+fun impure(y: Int): Int {
+    var x = 1
+    x = x + y
+    return x
+}
 ```
 
 Function above will be reported as impure (uses `var` and `return`).
 
 It can be rewritten to a pure version.
-```
-fun pure (y:Int ):Int = y + 1 
-```
 
+```kotlin
+fun pure(y: Int): Int = y + 1 
+```
 
 ## Suppressing
 
