@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.ImpureCode
+import io.gitlab.arturbosch.detekt.sample.extensions.rules.MutableCollectionsCode
 
 class ImpureProvider : RuleSetProvider {
 
@@ -12,7 +13,8 @@ class ImpureProvider : RuleSetProvider {
     override fun instance(config: Config): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            ImpureCode()
+            ImpureCode(),
+            MutableCollectionsCode(config)
         )
     )
 }
