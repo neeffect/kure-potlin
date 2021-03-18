@@ -4,16 +4,18 @@ This is a small plugin to [detekt](https://github.com/detekt/detekt) tool.
 The purpose is to report the potential use of impure language elements in
 kotlin code.
 
-So far it simply detects:
+## Detected rules
 
-- use of `var`
-- use of `for`, `while`
-- use of `return` statement
-- use of `Unit` as a return type
-- use of `throw`
-- use of mutable collections
-- use of object-oriented `class`
-- use of object-oriented `abstract class`
+Rule | Description | Enabled by default | Requires [type resolution](https://detekt.github.io/detekt/type-resolution.html)
+--- | --- | --- | ---
+LoopUsage | use of `for`, `while` | :white_check_mark: |
+ReturnStatement | use of `return` statement | :white_check_mark: |
+VariableUsage | use of `var` | :white_check_mark: |
+ReturnUnit | use of function returning `Unit` type | :white_check_mark: | :ballot_box_with_check:
+ClassDefinition | use of object-oriented `class` | |
+AbstractClassDefinition | use of object-oriented `abstract class` | :white_check_mark: |
+ThrowExpression | use of `throw` | :white_check_mark: |
+MutableCollections | use of mutable collections | :white_check_mark: | :ballot_box_with_check:
 
 ## Usage
 
@@ -32,6 +34,30 @@ dependencies {
   detektPlugins("pl.setblack:kure-potlin:0.2.1")
 }
 ```
+
+c) optionally, you can reconfigure this plugin by adding this to your custom `detekt.yaml`:
+```yaml
+impure:
+  active: true
+  LoopUsage:
+    active: true
+  ReturnStatement:
+    active: true
+  VariableUsage:
+    active: true
+  ReturnUnit:
+    active: true
+  ClassDefinition:
+    active: true
+  AbstractClassDefinition:
+    active: true
+  ThrowExpression:
+    active: true
+  MutableCollections:
+    active: true
+```
+
+d) run `gradle detekt` or `gradle detektMain` to use rules which require [type resolution](https://detekt.github.io/detekt/type-resolution.html)
 
 ## License
 
@@ -61,7 +87,8 @@ fun pure(y: Int): Int = y + 1
 
 If you need to ignore/suppress issues reported by this plugin.
 Just annotate function or class with:
-`@Suppress("ImpureCode")`
+`@Suppress("RULE")`
+where RULE is just a [supported rule name](#Rules).
 
 (This is a standard `detekt` feature).
 
