@@ -31,8 +31,8 @@ publishing {
     }
 }
 
-val ossrhUsername: String by project
-val ossrhPassword: String by project
+val ossrhUsername: String? by project
+val ossrhPassword: String? by project
 val signingKey: String? by project
 val signingPassword: String? by project
 
