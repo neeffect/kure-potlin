@@ -11,15 +11,25 @@ repositories {
 }
 
 val componentVersion = "0.2.2-SNAPSHOT"
+val spekVersion = "2.0.15"
+val detektVersion = "1.15.0"
 
 dependencies {
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.15.0")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:$detektVersion")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.31")
-    testImplementation("io.gitlab.arturbosch.detekt:detekt-api:1.15.0")
-    testImplementation("io.gitlab.arturbosch.detekt:detekt-test:1.15.0")
+    testImplementation("io.gitlab.arturbosch.detekt:detekt-api:$detektVersion")
+    testImplementation("io.gitlab.arturbosch.detekt:detekt-test:$detektVersion")
     testImplementation("org.assertj:assertj-core:3.19.0")
-    testImplementation("org.spekframework.spek2:spek-dsl-jvm:2.0.15")
+    testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
+
+tasks.withType<Test> {
+    useJUnitPlatform {
+        includeEngines("spek2")
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
