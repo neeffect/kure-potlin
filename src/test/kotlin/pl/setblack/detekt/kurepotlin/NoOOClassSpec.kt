@@ -8,7 +8,6 @@ import pl.setblack.detekt.kurepotlin.rules.ClassDefinition
 
 class NoOOClassSpec : Spek({
 
-
     describe("object-oriented class code rule") {
         val subject by memoized { ClassDefinition() }
 

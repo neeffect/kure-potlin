@@ -23,7 +23,7 @@ a) Use detect plugin in gradle build
 
 ```kotlin
 plugins {
-    id("io.gitlab.arturbosch.detekt").version("1.15.0")
+    id("io.gitlab.arturbosch.detekt").version("1.16.0")
 }
 ```
 
@@ -31,7 +31,7 @@ b) add dependency
 
 ```kotlin
 dependencies {
-  detektPlugins("pl.setblack:kure-potlin:0.2.1")
+  detektPlugins("pl.setblack:kure-potlin:0.3.0")
 }
 ```
 
@@ -48,9 +48,9 @@ impure:
   ReturnUnit:
     active: true
   ClassDefinition:
-    active: true
+    active: false
   AbstractClassDefinition:
-    active: true
+    active: false
   ThrowExpression:
     active: true
   MutableCollections:
@@ -104,6 +104,13 @@ occasionally.
 
 
 ## Releases
+version 3.0:
+- all rules configurable  (thanks  @krzykrucz) 
+- class rule (thanks  @krzykrucz)
+- abstract class rule (thanks  @krzykrucz)
+- upgraded to dektekt 1.16
+- compiled to jvm 1.8
+
 
 version 2.1:
 - detects `Unit` (thanks @MiSikora)

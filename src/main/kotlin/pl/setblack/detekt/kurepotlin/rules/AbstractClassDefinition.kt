@@ -12,6 +12,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import pl.setblack.detekt.kurepotlin.isPureType
 
 class AbstractClassDefinition(config: Config = Config.empty) : Rule(config) {
+    override val active: Boolean
+        get() = valueOrDefault(Config.ACTIVE_KEY, false)
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.CodeSmell,

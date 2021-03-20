@@ -14,7 +14,7 @@ import pl.setblack.detekt.kurepotlin.isPureType
 class ClassDefinition(config: Config = Config.empty) : Rule(config) {
 
     override val active: Boolean
-        get() = valueOrDefault(Config.ACTIVE_KEY, true)
+        get() = valueOrDefault(Config.ACTIVE_KEY, false)
 
     override val issue = Issue(
         javaClass.simpleName,

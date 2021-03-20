@@ -10,9 +10,9 @@ repositories {
     jcenter()
 }
 
-val componentVersion = "0.2.2-SNAPSHOT"
+val componentVersion = "0.3.0"
 val spekVersion = "2.0.15"
-val detektVersion = "1.15.0"
+val detektVersion = "1.16.0"
 
 dependencies {
     compileOnly("io.gitlab.arturbosch.detekt:detekt-api:$detektVersion")
@@ -74,7 +74,7 @@ val dokkaJar by tasks.creating(Jar::class) {
 
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions.apply {
-    jvmTarget = "11"
+    jvmTarget = "1.8"
     javaParameters = true
     allWarningsAsErrors = true
 }
