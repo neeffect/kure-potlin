@@ -1,19 +1,19 @@
 package pl.setblack.detekt.kurepotlin
 
 import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
-import pl.setblack.detekt.kurepotlin.rules.MutableCollectionsCode
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import pl.setblack.detekt.kurepotlin.rules.MutableCollections
 
 class NoMutableCollectionsSpec : Spek({
 
     setupKotlinEnvironment()
 
     describe("a mutable collections rule") {
-        val subject by memoized { MutableCollectionsCode() }
+        val subject by memoized { MutableCollections() }
         val env: KotlinCoreEnvironment by memoized()
 
         it("should find mutable set usages") {

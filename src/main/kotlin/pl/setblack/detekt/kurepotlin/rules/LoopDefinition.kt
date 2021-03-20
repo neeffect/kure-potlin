@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtLoopExpression
 
-class ThrowExpression(config: Config = Config.empty) : Rule(config) {
+class LoopDefinition(config: Config = Config.empty) : Rule(config) {
 
     override val active: Boolean
         get() = valueOrDefault(Config.ACTIVE_KEY, true)
@@ -17,18 +17,18 @@ class ThrowExpression(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.CodeSmell,
-        "Throwing side-effect exception",
+        "Shouldn't use loops in functional code",
         Debt.TWENTY_MINS
     )
 
-    override fun visitThrowExpression(expression: KtThrowExpression) {
+    override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+        val file = loopExpression.containingKtFile
         report(
             CodeSmell(
-                issue,
-                Entity.from(expression),
-                message = "Exception side-effect is thrown in a file ${expression.containingKtFile.name}."
+                issue, Entity.from(loopExpression),
+                message = "The file ${file.name} contains loop."
             )
         )
-        super.visitThrowExpression(expression)
+        super.visitLoopExpression(loopExpression)
     }
 }

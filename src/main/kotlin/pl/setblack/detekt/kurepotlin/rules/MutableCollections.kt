@@ -10,12 +10,20 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
-class MutableCollectionsCode(config: Config = Config.empty) : Rule(config) {
+/**
+ * @requiresTypeResolution
+ */
+class MutableCollections(config: Config = Config.empty) : Rule(config) {
+
+    override val active: Boolean
+        get() = valueOrDefault(Config.ACTIVE_KEY, true)
+
     override val issue = Issue(
         javaClass.simpleName,
         Severity.CodeSmell,
@@ -24,9 +32,11 @@ class MutableCollectionsCode(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
-        val hasMutableCollectionType = expression.getType(bindingContext)
-            ?.isMutableCollection()
-            ?: false
+        val hasMutableCollectionType =
+            bindingContext.takeUnless { it == BindingContext.EMPTY }
+                ?.let(expression::getType)
+                ?.isMutableCollection()
+                ?: false
         if (hasMutableCollectionType) {
             report(
                 CodeSmell(

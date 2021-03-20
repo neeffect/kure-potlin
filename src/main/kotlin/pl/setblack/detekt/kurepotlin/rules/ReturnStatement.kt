@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtReturnExpression
 
-class ThrowExpression(config: Config = Config.empty) : Rule(config) {
+class ReturnStatement(config: Config = Config.empty) : Rule(config) {
 
     override val active: Boolean
         get() = valueOrDefault(Config.ACTIVE_KEY, true)
@@ -17,18 +17,19 @@ class ThrowExpression(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.CodeSmell,
-        "Throwing side-effect exception",
+        "Pure function shouldn't have return statement",
         Debt.TWENTY_MINS
     )
 
-    override fun visitThrowExpression(expression: KtThrowExpression) {
+    override fun visitReturnExpression(expression: KtReturnExpression) {
+        val file = expression.containingKtFile
         report(
             CodeSmell(
-                issue,
-                Entity.from(expression),
-                message = "Exception side-effect is thrown in a file ${expression.containingKtFile.name}."
+                issue, Entity.from(expression),
+                message = "The file ${file.name} contains `return` statement."
             )
         )
-        super.visitThrowExpression(expression)
+        super.visitReturnExpression(expression)
     }
+
 }
