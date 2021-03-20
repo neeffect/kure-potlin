@@ -21,18 +21,6 @@ class VariableDefinition(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-//    override fun visitBinaryExpression(expression: KtBinaryExpression) {
-//        println("binary expression: ${expression.text} ${expression.operationToken}")
-//        if (expression.operationToken.toString() == "EQ") {
-//            val file  = expression.containingKtFile
-//            report(
-//                CodeSmell(issue, Entity.atPackageOrFirstDecl(file),
-//                    message = "The file ${file.name} contains assignment to `var`iable.")
-//            )
-//        }
-//        super.visitBinaryExpression(expression)
-//    }
-
     override fun visitProperty(property: KtProperty) {
         if (property.isVar) {
             val file = property.containingKtFile
