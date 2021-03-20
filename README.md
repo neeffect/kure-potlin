@@ -104,7 +104,7 @@ occasionally.
 
 
 ## Releases
-version 3.0:
+version 0.3.0:
 - all rules configurable  (thanks  @krzykrucz) 
 - class rule (thanks  @krzykrucz)
 - abstract class rule (thanks  @krzykrucz)
@@ -112,11 +112,11 @@ version 3.0:
 - compiled to jvm 1.8
 
 
-version 2.1:
+version 0.2.1:
 - detects `Unit` (thanks @MiSikora)
 - detects mutable collections (thanks @krzykrucz)
 - detects `throws` (thanks @krzykrucz)
     and all from version 1.3
 
-version 1.3:
+version 0.1.3:
     detects only `var`, loops and `return`
