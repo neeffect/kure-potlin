@@ -13,7 +13,7 @@ ReturnStatement | use of `return` statement | :white_check_mark: |
 VariableUsage | use of `var` | :white_check_mark: |
 ReturnUnit | use of function returning `Unit` type | :white_check_mark: | :ballot_box_with_check:
 ClassDefinition | use of object-oriented `class` | |
-AbstractClassDefinition | use of object-oriented `abstract class` | :white_check_mark: |
+AbstractClassDefinition | use of object-oriented `abstract class` |
 ThrowExpression | use of `throw` | :white_check_mark: |
 MutableCollections | use of mutable collections | :white_check_mark: | :ballot_box_with_check:
 
