@@ -59,6 +59,8 @@ private const val impureCode: String =
         fun impureUnitImplicit() { }
         
         fun impureUnitExpression() = Unit
+        
+        typealias PureFunctionType = () -> String
 
         fun pureString() = "pure"
 

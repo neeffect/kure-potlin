@@ -41,7 +41,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.let(lambdaExpression::getType)
             ?.getReturnTypeFromFunctionType()
-            ?.isUnit()
+            ?.takeIf(KotlinType::isUnit)
             ?.let {
                 val file = lambdaExpression.containingKtFile.name
                 val name = lambdaExpression.parent.namedUnwrappedElement?.name ?: lambdaExpression.name ?: "expression"
@@ -60,7 +60,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
-            ?.isUnit()
+            ?.takeIf(KotlinType::isUnit)
             ?.takeIf { checkFunctionType }
             ?.let {
                 val file = type.containingKtFile
