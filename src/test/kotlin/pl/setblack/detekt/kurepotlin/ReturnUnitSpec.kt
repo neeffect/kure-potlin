@@ -20,6 +20,9 @@ class ReturnUnitSpec : Spek({
         it("find returns of Unit") {
             val messages = subject.lintWithContext(env, impureCode).map(Finding::message)
             assertThat(messages).containsExactly(
+                "Function ImpureUnitFunctionType in the file Test.kt returns Unit.",
+                "Function impureUnitLambda in the file Test.kt returns Unit.",
+                "Function impureParameter in the file Test.kt returns Unit.",
                 "Function impureUnitExplicit in the file Test.kt returns Unit.",
                 "Function impureUnitImplicit in the file Test.kt returns Unit.",
                 "Function impureUnitExpression in the file Test.kt returns Unit.",
@@ -30,6 +33,12 @@ class ReturnUnitSpec : Spek({
 
 private const val impureCode: String =
     """
+        typealias ImpureUnitFunctionType = () -> Unit
+        
+        val impureUnitLambda: ImpureUnitFunction = { }
+
+        fun impureParameterFunction(impureParameter: () -> Unit) = "impure"
+
         fun impureUnitExplicit(): Unit { }
         
         fun impureUnitImplicit() { }
