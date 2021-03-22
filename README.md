@@ -6,16 +6,16 @@ kotlin code.
 
 ## Detected rules
 
-Rule | Detects | Enabled <br /> by default | Requires <br /> [type resolution](https://detekt.github.io/detekt/type-resolution.html)
+Rule | Detects | Properties <br /> with defaults | Requires <br /> [type resolution](https://detekt.github.io/detekt/type-resolution.html)
 --- | --- | --- | ---
-LoopUsage | use of `for`, `while` | :white_check_mark: |
-ReturnStatement | use of `return` statement | :white_check_mark: |
-VariableUsage | use of `var` | :white_check_mark: |
-ReturnUnit | use of function returning `Unit` type | :white_check_mark: | :ballot_box_with_check:
-ClassDefinition | use of object-oriented `class` | |
-AbstractClassDefinition | use of object-oriented `abstract class` |
-ThrowExpression | use of `throw` | :white_check_mark: |
-MutableCollections | use of mutable collections | :white_check_mark: | :ballot_box_with_check:
+LoopUsage | use of `for`, `while` | `active`: true |
+ReturnStatement | use of `return` statement | `active`: true |
+VariableUsage | use of `var` | `active`: true |
+ReturnUnit | use of function returning `Unit` type | `active`: true<br />`checkFunctionType`: true | :ballot_box_with_check:
+ClassDefinition | use of object-oriented `class` | `active`: false |
+AbstractClassDefinition | use of object-oriented `abstract class` | `active`: false |
+ThrowExpression | use of `throw` | `active`: true |
+MutableCollections | use of mutable collections | `active`: true | :ballot_box_with_check:
 
 ## Usage
 
