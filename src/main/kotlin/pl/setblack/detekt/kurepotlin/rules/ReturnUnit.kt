@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
 import org.jetbrains.kotlin.psi.KtFunctionType
@@ -71,6 +72,8 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.isMainFunction()) return
+
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.get(BindingContext.FUNCTION, function)
             ?.returnType

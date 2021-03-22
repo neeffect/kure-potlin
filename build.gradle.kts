@@ -16,6 +16,7 @@ val detektVersion = "1.16.0"
 
 dependencies {
     compileOnly("io.gitlab.arturbosch.detekt:detekt-api:$detektVersion")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-psi-utils:$detektVersion")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.31")
     testImplementation("io.gitlab.arturbosch.detekt:detekt-api:$detektVersion")
     testImplementation("io.gitlab.arturbosch.detekt:detekt-test:$detektVersion")

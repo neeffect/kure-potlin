@@ -46,4 +46,8 @@ private const val impureCode: String =
         fun impureUnitExpression() = Unit
 
         fun pureString() = "pure"
+
+        fun main(args: Array<String>) {
+            // pure
+        }
     """
