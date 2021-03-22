@@ -24,6 +24,9 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  */
 class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
+    private val checkFunctionType: Boolean
+        get() = valueOrDefault("checkFunctionType", true)
+
     override val active: Boolean
         get() = valueOrDefault(Config.ACTIVE_KEY, true)
 
@@ -58,6 +61,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
             ?.isUnit()
+            ?.takeIf { checkFunctionType }
             ?.let {
                 val file = type.containingKtFile
                 val name = type.parent.namedUnwrappedElement?.name ?: type.name ?: "type"
@@ -72,11 +76,10 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.isMainFunction()) return
-
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.get(BindingContext.FUNCTION, function)
             ?.returnType
+            ?.takeUnless { function.isMainFunction() }
             ?.takeIf(KotlinType::isUnit)
             ?.let {
                 val file = function.containingKtFile
