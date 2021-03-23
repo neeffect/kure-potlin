@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.isNothingOrNullableNothing
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -41,7 +43,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.let(lambdaExpression::getType)
             ?.getReturnTypeFromFunctionType()
-            ?.takeIf(KotlinType::isUnit)
+            ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
                 val file = lambdaExpression.containingKtFile.name
                 val name = lambdaExpression.parent.namedUnwrappedElement?.name ?: lambdaExpression.name ?: "expression"
@@ -49,7 +51,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
                     CodeSmell(
                         issue,
                         Entity.from(lambdaExpression),
-                        message = "Function $name in the file $file returns Unit."
+                        message = "Function $name in the file $file returns nothing."
                     )
                 )
             }
@@ -60,7 +62,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
-            ?.takeIf(KotlinType::isUnit)
+            ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.takeIf { checkFunctionType }
             ?.let {
                 val file = type.containingKtFile
@@ -68,7 +70,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
                 report(
                     CodeSmell(
                         issue, Entity.from(type),
-                        message = "Function $name in the file ${file.name} returns Unit."
+                        message = "Function $name in the file ${file.name} returns nothing."
                     )
                 )
             }
@@ -80,16 +82,22 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
             ?.get(BindingContext.FUNCTION, function)
             ?.returnType
             ?.takeUnless { function.isMainFunction() }
-            ?.takeIf(KotlinType::isUnit)
+            ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
                 val file = function.containingKtFile
                 report(
                     CodeSmell(
                         issue, Entity.from(function),
-                        message = "Function ${function.name} in the file ${file.name} returns Unit."
+                        message = "Function ${function.name} in the file ${file.name} returns nothing."
                     )
                 )
             }
         super.visitNamedFunction(function)
     }
 }
+
+private fun KotlinType.isUnitNothingOrVoid(): Boolean =
+    isUnit() || isNothingOrNullableNothing() || isVoid()
+
+private fun KotlinType.isVoid(): Boolean =
+    this.getJetTypeFqName(true) == "java.lang.Void"

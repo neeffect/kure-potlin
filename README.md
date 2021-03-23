@@ -11,7 +11,7 @@ Rule | Detects | Properties <br /> with defaults | Requires <br /> [type resolut
 LoopUsage | use of `for`, `while` | `active`: true |
 ReturnStatement | use of `return` statement | `active`: true |
 VariableUsage | use of `var` | `active`: true |
-ReturnUnit | use of function returning `Unit` type | `active`: true<br />`checkFunctionType`: true | :ballot_box_with_check:
+ReturnUnit | use of function returning `Unit`, `Nothing`, `Void` | `active`: true<br />`checkFunctionType`: true | :ballot_box_with_check:
 ClassDefinition | use of object-oriented `class` | `active`: false |
 AbstractClassDefinition | use of object-oriented `abstract class` | `active`: false |
 ThrowExpression | use of `throw` | `active`: true |
