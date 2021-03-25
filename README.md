@@ -19,9 +19,13 @@ MutableCollections | use of mutable collections | :white_check_mark: | :ballot_b
 
 ## Usage
 
-a) Use detect plugin in gradle build
+a) Use detect plugin in gradle build (.kts syntax). In case of problems refer to [detekt](https://detekt.github.io/detekt/gradle.html) documentation.
 
 ```kotlin
+repositories {
+    jcenter()
+}
+
 plugins {
     id("io.gitlab.arturbosch.detekt").version("1.16.0")
 }
