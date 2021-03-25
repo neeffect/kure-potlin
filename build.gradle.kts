@@ -10,7 +10,7 @@ repositories {
     jcenter()
 }
 
-val componentVersion = "0.3.0"
+val componentVersion = "0.3.2-SNAPSHOT"
 val spekVersion = "2.0.15"
 val detektVersion = "1.16.0"
 
