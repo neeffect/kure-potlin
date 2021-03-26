@@ -10,7 +10,7 @@ repositories {
     jcenter()
 }
 
-val componentVersion = "0.3.2-SNAPSHOT"
+val componentVersion = "0.3.3-SNAPSHOT"
 val spekVersion = "2.0.15"
 val detektVersion = "1.16.0"
 
@@ -135,3 +135,7 @@ publishing {
     }
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

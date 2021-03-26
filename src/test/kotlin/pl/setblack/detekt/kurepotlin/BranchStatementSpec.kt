@@ -19,6 +19,7 @@ class BranchStatementSpec : Spek({
 
         it("find branch that is a statement") {
             val messages = subject.lintWithContext(env, impureCode).map(Finding::message)
+
             assertThat(messages).containsExactly(
                 "if statement in the file Test.kt is not an expression.",
                 "if statement in the file Test.kt is not an expression.",
@@ -30,14 +31,36 @@ class BranchStatementSpec : Spek({
 
 private const val impureCode: String =
     """
+        fun validIfExpression(a:Int) = run {
+           if (a>5) {
+                a+1
+            } else {
+                -a
+            }
+        }
+
+        fun validIfInsideWhen(a:Int, b:Int):Int = run {
+            when ( a) { 
+                1 -> {
+                    if (b > 0) {
+                         1
+                    } else { 
+                        2
+                     }
+                }
+                else -> TODO()
+            }
+        }
+
        fun ifWithoutElse(a:Int) = run {
             if (a > 5) {
                 println(a)
             }
             "ok"
        }
+       }
 
-        fun ifWithElseButStatement(a:Int) = run {
+        fun ifWithElseStatement(a:Int) = run {
            if (a>5) {
                 a+1
             } else {
@@ -52,9 +75,16 @@ private const val impureCode: String =
             }
         }
 
-        fun whenExpression(a:Int) =
+        fun validWhenExpression(a:Int) =
             when (a){
                0 -> "ok"
                else -> "nok"
             }
+
+        fun validWhenExpression2(a:Int) = run {
+            when (a){
+               1 -> "ok"
+               else -> "nok"
+            }
+        }
     """

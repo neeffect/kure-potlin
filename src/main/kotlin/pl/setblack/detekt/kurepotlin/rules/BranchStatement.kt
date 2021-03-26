@@ -9,9 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
-import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
+import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsResultOfLambda
 
 class BranchStatement(config: Config = Config.empty) : Rule(config) {
 
@@ -26,27 +27,35 @@ class BranchStatement(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
-        val file = expression.containingKtFile
-        when(expression.context) {
-            is KtBlockExpression -> report(
-                CodeSmell(
-                    issue, Entity.from(expression),
-                    message = "when statement in the file ${file.name} is not an expression."
-                )
-            )
+        bindingContext.takeIf { it != BindingContext.EMPTY }?.let {
+            val file = expression.containingKtFile
+            if (!expression.isUsedAsExpression(bindingContext)) {
+                when (expression.context) {
+                    is KtBlockExpression -> report(
+                        CodeSmell(
+                            issue, Entity.from(expression),
+                            message = "when statement in the file ${file.name} is not an expression."
+                        )
+                    )
+                }
+            }
         }
         super.visitWhenExpression(expression)
     }
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        val file = expression.containingKtFile
-        when(expression.context) {
-            is KtBlockExpression -> report(
-                CodeSmell(
-                    issue, Entity.from(expression),
-                    message = "if statement in the file ${file.name} is not an expression."
-                )
-            )
+        bindingContext.takeIf { it != BindingContext.EMPTY }?.let {
+            val file = expression.containingKtFile
+            if (!expression.isUsedAsExpression(bindingContext)) {
+                when (expression.context) {
+                    is KtBlockExpression -> report(
+                        CodeSmell(
+                            issue, Entity.from(expression),
+                            message = "if statement in the file ${file.name} is not an expression."
+                        )
+                    )
+                }
+            }
         }
         super.visitIfExpression(expression)
     }
