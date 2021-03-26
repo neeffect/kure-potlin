@@ -17,7 +17,7 @@ AbstractClassDefinition | use of object-oriented `abstract class` |
 ThrowExpression | use of `throw` | :white_check_mark: |
 MutableCollections | use of mutable collections | :white_check_mark: | :ballot_box_with_check:
 BranchStatement | use of `if` or `when` as statement | :white_check_mark: |
-MissingElse | use of `if` statement without `else` | :white_check_mark: |
+MissingElse | use of `if` statement without `else` | |
 
 
 ## Usage
