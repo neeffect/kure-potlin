@@ -4,8 +4,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import pl.setblack.detekt.kurepotlin.rules.AbstractClassDefinition
+import pl.setblack.detekt.kurepotlin.rules.BranchStatement
 import pl.setblack.detekt.kurepotlin.rules.ClassDefinition
 import pl.setblack.detekt.kurepotlin.rules.LoopDefinition
+import pl.setblack.detekt.kurepotlin.rules.MissingElse
 import pl.setblack.detekt.kurepotlin.rules.MutableCollections
 import pl.setblack.detekt.kurepotlin.rules.ReturnStatement
 import pl.setblack.detekt.kurepotlin.rules.ReturnUnit
@@ -27,7 +29,9 @@ class ImpureProvider : RuleSetProvider {
             ClassDefinition(config),
             AbstractClassDefinition(config),
             ThrowExpression(config),
-            MutableCollections(config)
+            MutableCollections(config),
+            BranchStatement(config),
+            MissingElse(config)
         )
     )
 }

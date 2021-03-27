@@ -16,6 +16,8 @@ ClassDefinition | use of object-oriented `class` | `active`: false |
 AbstractClassDefinition | use of object-oriented `abstract class` | `active`: false |
 ThrowExpression | use of `throw` | `active`: true |
 MutableCollections | use of mutable collections | `active`: true | :ballot_box_with_check:
+BranchStatement | use of `if` or `when` as statement | :white_check_mark: |
+MissingElse | use of `if` statement without `else` | |
 
 ## Usage
 
@@ -59,6 +61,10 @@ impure:
     active: true
   MutableCollections:
     active: true
+  BranchStatement:
+    active: true
+  MissingElse:
+    active: false
 ```
 
 d) run `gradle detekt` or `gradle detektMain` to use rules which require [type resolution](https://detekt.github.io/detekt/type-resolution.html)
