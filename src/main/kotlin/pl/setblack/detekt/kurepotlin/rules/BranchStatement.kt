@@ -14,6 +14,9 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsResultOfLambda
 
+/**
+ * @requiresTypeResolution
+ */
 class BranchStatement(config: Config = Config.empty) : Rule(config) {
 
     override val active: Boolean
