@@ -64,7 +64,7 @@ impure:
   BranchStatement:
     active: true
   MissingElse:
-    active: true
+    active: false
 ```
 
 d) run `gradle detekt` or `gradle detektMain` to use rules which require [type resolution](https://detekt.github.io/detekt/type-resolution.html)
