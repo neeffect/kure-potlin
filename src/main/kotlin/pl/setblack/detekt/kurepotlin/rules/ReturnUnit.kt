@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
@@ -20,6 +21,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isNothingOrNullableNothing
 import org.jetbrains.kotlin.types.typeUtil.isUnit
+import pl.setblack.detekt.kurepotlin.isAnnotatedWithAnyOf
 
 /**
  * @requiresTypeResolution
@@ -28,6 +30,9 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     private val checkFunctionType: Boolean
         get() = valueOrDefault("checkFunctionType", true)
+
+    private val ignoreAnnotated: List<String>
+        get() = valueOrDefaultCommaSeparated("ignoreAnnotated", emptyList())
 
     override val active: Boolean
         get() = valueOrDefault(Config.ACTIVE_KEY, true)
@@ -43,6 +48,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.let(lambdaExpression::getType)
             ?.getReturnTypeFromFunctionType()
+            ?.takeUnless { lambdaExpression.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
                 val file = lambdaExpression.containingKtFile.name
@@ -62,6 +68,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
+            ?.takeUnless { type.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.takeIf { checkFunctionType }
             ?.let {
@@ -81,6 +88,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.get(BindingContext.FUNCTION, function)
             ?.returnType
+            ?.takeUnless { function.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.takeUnless { function.isMainFunction() }
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
