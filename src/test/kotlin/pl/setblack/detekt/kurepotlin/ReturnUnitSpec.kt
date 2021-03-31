@@ -39,11 +39,19 @@ class ReturnUnitSpec : Spek({
                 "Function ImpureUnitFunctionType in the file Test.kt returns nothing.",
                 "Function impureUnitLambda in the file Test.kt returns nothing.",
                 "Function impureParameter in the file Test.kt returns nothing.",
-                "Function nonDslParameter in the file Test.kt returns nothing.",
-                "Function nonDslParameter in the file Test.kt returns nothing.",
                 "Function impureUnitExplicit in the file Test.kt returns nothing.",
                 "Function impureUnitImplicit in the file Test.kt returns nothing.",
                 "Function impureUnitExpression in the file Test.kt returns nothing.",
+            )
+        }
+
+        it("should find dsl") {
+            val messages = subject.lintWithContext(env, dslCode).map(Finding::message)
+            assertThat(messages).containsExactly(
+                "Function dslParameter in the file Test.kt returns nothing.",
+                "Function dslParameter in the file Test.kt returns nothing.",
+                "Function nonDslParameter in the file Test.kt returns nothing.",
+                "Function nonDslParameter in the file Test.kt returns nothing."
             )
         }
 
@@ -70,6 +78,18 @@ class ReturnUnitSpec : Spek({
         }
     }
 
+    describe("a rule with dsl allowed") {
+        val subject by memoized { ReturnUnit(TestConfig("ignoreDsl" to true)) }
+
+        it("should find only non-dsl") {
+            val messages = subject.lintWithContext(env, dslCode).map(Finding::message)
+            assertThat(messages).containsExactly(
+                "Function nonDslParameter in the file Test.kt returns nothing.",
+                "Function nonDslParameter in the file Test.kt returns nothing."
+            )
+        }
+    }
+
     describe("a rule not checking function types") {
 
         val subject by memoized { ReturnUnit(TestConfig("checkFunctionType" to false)) }
@@ -78,7 +98,6 @@ class ReturnUnitSpec : Spek({
             val messages = subject.lintWithContext(env, impureUnitCode).map(Finding::message)
             assertThat(messages).containsExactly(
                 "Function impureUnitLambda in the file Test.kt returns nothing.",
-                "Function nonDslParameter in the file Test.kt returns nothing.",
                 "Function impureUnitExplicit in the file Test.kt returns nothing.",
                 "Function impureUnitImplicit in the file Test.kt returns nothing.",
                 "Function impureUnitExpression in the file Test.kt returns nothing.",
@@ -114,10 +133,6 @@ private const val impureUnitCode: String =
 
         fun impureParameterFunction(impureParameter: () -> Unit) = "impure"
 
-        fun dslParameterFunction(dslParameter: DslBuilder.() -> Unit = {}) = "impure"
-        
-        fun nonDslParameterFunction(nonDslParameter: DslBuilder.(String) -> Unit = {}) = "impure"
-
         fun impureUnitExplicit(): Unit { }
         
         fun impureUnitImplicit() { }
@@ -131,6 +146,17 @@ private const val impureUnitCode: String =
         fun main(args: Array<String>) {
             // pure
         }
+
+        fun main(vararg args: String) {
+            // pure
+        }
+    """
+
+private const val dslCode: String =
+    """
+        fun dslParameterFunction(dslParameter: DslBuilder.() -> Unit = {}) = "impure"
+        
+        fun nonDslParameterFunction(nonDslParameter: DslBuilder.(String) -> Unit = {}) = "impure"
 
         class DslBuilder { }
     """

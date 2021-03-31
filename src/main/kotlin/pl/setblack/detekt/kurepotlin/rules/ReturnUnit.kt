@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
-import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
@@ -24,6 +23,7 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isNothingOrNullableNothing
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 import pl.setblack.detekt.kurepotlin.isAnnotatedWithAnyOf
+import pl.setblack.detekt.kurepotlin.isMainFunction
 
 /**
  * @requiresTypeResolution
@@ -35,6 +35,9 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     private val ignoreAnnotated: List<String>
         get() = valueOrDefaultCommaSeparated("ignoreAnnotated", emptyList())
+
+    private val ignoreDsl: Boolean
+        get() = valueOrDefault("ignoreDsl", false)
 
     override val active: Boolean
         get() = valueOrDefault(Config.ACTIVE_KEY, true)
@@ -48,7 +51,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
-            ?.takeUnless { lambdaExpression.isDsl(it) }
+            ?.takeUnless { ignoreDsl && lambdaExpression.isDsl(it) }
             ?.takeUnless { lambdaExpression.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.let(lambdaExpression::getType)
             ?.getReturnTypeFromFunctionType()
@@ -70,7 +73,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
     override fun visitFunctionType(type: KtFunctionType) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.takeIf { checkFunctionType }
-            ?.takeUnless { type.isDsl() }
+            ?.takeUnless { ignoreDsl && type.isDsl() }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
             ?.takeUnless { type.isAnnotatedWithAnyOf(ignoreAnnotated) }
