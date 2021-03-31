@@ -78,6 +78,7 @@ class ReturnUnitSpec : Spek({
             val messages = subject.lintWithContext(env, impureUnitCode).map(Finding::message)
             assertThat(messages).containsExactly(
                 "Function impureUnitLambda in the file Test.kt returns nothing.",
+                "Function nonDslParameter in the file Test.kt returns nothing.",
                 "Function impureUnitExplicit in the file Test.kt returns nothing.",
                 "Function impureUnitImplicit in the file Test.kt returns nothing.",
                 "Function impureUnitExpression in the file Test.kt returns nothing.",
