@@ -30,8 +30,8 @@ import pl.setblack.detekt.kurepotlin.isMainFunction
  */
 class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
-    private val checkFunctionType: Boolean
-        get() = valueOrDefault("checkFunctionType", true)
+    private val ignoreFunctionType: Boolean
+        get() = valueOrDefault("ignoreFunctionType", false)
 
     private val ignoreAnnotated: List<String>
         get() = valueOrDefaultCommaSeparated("ignoreAnnotated", emptyList())
@@ -72,11 +72,11 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitFunctionType(type: KtFunctionType) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
-            ?.takeIf { checkFunctionType }
+            ?.takeUnless { ignoreFunctionType }
             ?.takeUnless { ignoreDsl && type.isDsl() }
+            ?.takeUnless { type.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
-            ?.takeUnless { type.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
                 val file = type.containingKtFile

@@ -92,7 +92,7 @@ class ReturnUnitSpec : Spek({
 
     describe("a rule not checking function types") {
 
-        val subject by memoized { ReturnUnit(TestConfig("checkFunctionType" to false)) }
+        val subject by memoized { ReturnUnit(TestConfig("ignoreFunctionType" to true)) }
 
         it("find returns of Unit") {
             val messages = subject.lintWithContext(env, impureUnitCode).map(Finding::message)
