@@ -108,7 +108,7 @@ class ReturnUnitSpec : Spek({
     describe("a rule suppressed by ") {
 
         val subject by memoized {
-            ReturnUnit(TestConfig("ignoreAnnotated" to "IO"))
+            ReturnUnit(TestConfig("ignoredAnnotations" to "IO"))
         }
 
         it("find returns of Unit") {

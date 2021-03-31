@@ -33,8 +33,8 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
     private val ignoreFunctionType: Boolean
         get() = valueOrDefault("ignoreFunctionType", false)
 
-    private val ignoreAnnotated: List<String>
-        get() = valueOrDefaultCommaSeparated("ignoreAnnotated", emptyList())
+    private val ignoredAnnotations: List<String>
+        get() = valueOrDefaultCommaSeparated("ignoredAnnotations", emptyList())
 
     private val ignoreDsl: Boolean
         get() = valueOrDefault("ignoreDsl", false)
@@ -52,7 +52,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.takeUnless { ignoreDsl && lambdaExpression.isDsl(it) }
-            ?.takeUnless { lambdaExpression.isAnnotatedWithAnyOf(ignoreAnnotated) }
+            ?.takeUnless { lambdaExpression.isAnnotatedWithAnyOf(ignoredAnnotations) }
             ?.let(lambdaExpression::getType)
             ?.getReturnTypeFromFunctionType()
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
@@ -74,7 +74,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
             ?.takeUnless { ignoreFunctionType }
             ?.takeUnless { ignoreDsl && type.isDsl() }
-            ?.takeUnless { type.isAnnotatedWithAnyOf(ignoreAnnotated) }
+            ?.takeUnless { type.isAnnotatedWithAnyOf(ignoredAnnotations) }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
@@ -93,7 +93,7 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
-            ?.takeUnless { function.isAnnotatedWithAnyOf(ignoreAnnotated) }
+            ?.takeUnless { function.isAnnotatedWithAnyOf(ignoredAnnotations) }
             ?.takeUnless { function.isMainFunction() }
             ?.get(BindingContext.FUNCTION, function)
             ?.returnType
