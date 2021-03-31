@@ -78,7 +78,7 @@ class ReturnUnitSpec : Spek({
         }
     }
 
-    describe("a rule with dsl allowed") {
+    describe("a rule with dsl ignored") {
         val subject by memoized { ReturnUnit(TestConfig("ignoreDsl" to true)) }
 
         it("should find only non-dsl") {
@@ -105,7 +105,7 @@ class ReturnUnitSpec : Spek({
         }
     }
 
-    describe("a rule suppressed by ") {
+    describe("a rule suppressed by IO annotation") {
 
         val subject by memoized {
             ReturnUnit(TestConfig("ignoredAnnotations" to "IO"))
