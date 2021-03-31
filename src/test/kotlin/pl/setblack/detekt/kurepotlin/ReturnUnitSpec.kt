@@ -39,6 +39,8 @@ class ReturnUnitSpec : Spek({
                 "Function ImpureUnitFunctionType in the file Test.kt returns nothing.",
                 "Function impureUnitLambda in the file Test.kt returns nothing.",
                 "Function impureParameter in the file Test.kt returns nothing.",
+                "Function nonDslParameter in the file Test.kt returns nothing.",
+                "Function nonDslParameter in the file Test.kt returns nothing.",
                 "Function impureUnitExplicit in the file Test.kt returns nothing.",
                 "Function impureUnitImplicit in the file Test.kt returns nothing.",
                 "Function impureUnitExpression in the file Test.kt returns nothing.",
@@ -111,6 +113,10 @@ private const val impureUnitCode: String =
 
         fun impureParameterFunction(impureParameter: () -> Unit) = "impure"
 
+        fun dslParameterFunction(dslParameter: DslBuilder.() -> Unit = {}) = "impure"
+        
+        fun nonDslParameterFunction(nonDslParameter: DslBuilder.(String) -> Unit = {}) = "impure"
+
         fun impureUnitExplicit(): Unit { }
         
         fun impureUnitImplicit() { }
@@ -124,6 +130,8 @@ private const val impureUnitCode: String =
         fun main(args: Array<String>) {
             // pure
         }
+
+        class DslBuilder { }
     """
 
 private const val impureUnitSuppressedCode: String =

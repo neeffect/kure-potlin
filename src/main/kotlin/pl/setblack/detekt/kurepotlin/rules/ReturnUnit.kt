@@ -10,7 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
+import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.getValueParameterTypesFromFunctionType
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -46,9 +48,10 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
+            ?.takeUnless { lambdaExpression.isDsl(it) }
+            ?.takeUnless { lambdaExpression.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.let(lambdaExpression::getType)
             ?.getReturnTypeFromFunctionType()
-            ?.takeUnless { lambdaExpression.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
                 val file = lambdaExpression.containingKtFile.name
@@ -66,11 +69,12 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitFunctionType(type: KtFunctionType) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
+            ?.takeIf { checkFunctionType }
+            ?.takeUnless { type.isDsl() }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
             ?.takeUnless { type.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
-            ?.takeIf { checkFunctionType }
             ?.let {
                 val file = type.containingKtFile
                 val name = type.parent.namedUnwrappedElement?.name ?: type.name ?: "type"
@@ -86,10 +90,10 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
-            ?.get(BindingContext.FUNCTION, function)
-            ?.returnType
             ?.takeUnless { function.isAnnotatedWithAnyOf(ignoreAnnotated) }
             ?.takeUnless { function.isMainFunction() }
+            ?.get(BindingContext.FUNCTION, function)
+            ?.returnType
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
                 val file = function.containingKtFile
@@ -103,6 +107,16 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         super.visitNamedFunction(function)
     }
 }
+
+private fun KtLambdaExpression.isDsl(bindingContext: BindingContext) =
+    getType(bindingContext)
+        ?.let {
+            it.getReceiverTypeFromFunctionType() != null && it.getValueParameterTypesFromFunctionType().isEmpty()
+        }
+        ?: false
+
+private fun KtFunctionType.isDsl() =
+    receiverTypeReference != null && parameters.isEmpty()
 
 private fun KotlinType.isUnitNothingOrVoid(): Boolean =
     isUnit() || isNothingOrNullableNothing() || isVoid()
