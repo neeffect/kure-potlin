@@ -37,7 +37,7 @@ b) add dependency
 
 ```kotlin
 dependencies {
-    detektPlugins("pl.setblack:kure-potlin:0.3.0")
+    detektPlugins("pl.setblack:kure-potlin:0.5.0")
 }
 ```
 
@@ -114,6 +114,9 @@ java) objects will not be detected. The existing java/kotlin ecosystem will also
 occasionally.
 
 ## Releases
+
+version 0.5.0:
+ - improved Unit rule
 
 version 0.4.0:
 
