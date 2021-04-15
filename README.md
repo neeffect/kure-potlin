@@ -10,13 +10,13 @@ Rule | Detects | Properties <br /> with defaults | Requires <br /> [type resolut
 LoopUsage | use of `for`, `while` | `active`: true |
 ReturnStatement | use of `return` statement | `active`: true |
 VariableUsage | use of `var` | `active`: true |
-ReturnUnit | use of function returning `Unit`, `Nothing`, `Void` | `active`: true<br />`checkFunctionType`: true | :ballot_box_with_check:
+ReturnUnit | use of function returning `Unit`, `Nothing`, `Void`; unless annotated with an annotation which name is specified in `ignoredAnnotations` | `active`: true<br />`ignoreFunctionType`: false<br />`ignoredAnnotations`: []<br />`ignoreDsl`: false | :ballot_box_with_check:
 ClassDefinition | use of object-oriented `class` | `active`: false |
 AbstractClassDefinition | use of object-oriented `abstract class` | `active`: false |
 ThrowExpression | use of `throw` | `active`: true |
 MutableCollections | use of mutable collections | `active`: true | :ballot_box_with_check:
-BranchStatement | use of `if` or `when` as statement | :white_check_mark: |
-MissingElse | use of `if` statement without `else` (which also makes it a statement covered by `BranchStatement`) | |
+BranchStatement | use of `if` or `when` as statement | `active`: true |
+MissingElse | use of `if` statement without `else` (which also makes it a statement covered by `BranchStatement`) | `active`: false |
 
 ## Usage
 
@@ -54,6 +54,9 @@ impure:
     active: true
   ReturnUnit:
     active: true
+    ignoreFunctionType: false
+    ignoredAnnotations: [ ]
+    ignoreDsl: false
   ClassDefinition:
     active: false
   AbstractClassDefinition:

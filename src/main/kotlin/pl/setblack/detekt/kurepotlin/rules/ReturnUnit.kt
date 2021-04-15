@@ -7,9 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isMainFunction
+import io.gitlab.arturbosch.detekt.api.internal.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
+import org.jetbrains.kotlin.builtins.getReceiverTypeFromFunctionType
 import org.jetbrains.kotlin.builtins.getReturnTypeFromFunctionType
+import org.jetbrains.kotlin.builtins.getValueParameterTypesFromFunctionType
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -20,14 +22,22 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isNothingOrNullableNothing
 import org.jetbrains.kotlin.types.typeUtil.isUnit
+import pl.setblack.detekt.kurepotlin.isAnnotatedWithAnyOf
+import pl.setblack.detekt.kurepotlin.isMainFunction
 
 /**
  * @requiresTypeResolution
  */
 class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
-    private val checkFunctionType: Boolean
-        get() = valueOrDefault("checkFunctionType", true)
+    private val ignoreFunctionType: Boolean
+        get() = valueOrDefault("ignoreFunctionType", false)
+
+    private val ignoredAnnotations: List<String>
+        get() = valueOrDefaultCommaSeparated("ignoredAnnotations", emptyList())
+
+    private val ignoreDsl: Boolean
+        get() = valueOrDefault("ignoreDsl", false)
 
     override val active: Boolean
         get() = valueOrDefault(Config.ACTIVE_KEY, true)
@@ -41,6 +51,8 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
+            ?.takeUnless { ignoreDsl && lambdaExpression.isDsl(it) }
+            ?.takeUnless { lambdaExpression.isAnnotatedWithAnyOf(ignoredAnnotations) }
             ?.let(lambdaExpression::getType)
             ?.getReturnTypeFromFunctionType()
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
@@ -60,10 +72,12 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitFunctionType(type: KtFunctionType) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
+            ?.takeUnless { ignoreFunctionType }
+            ?.takeUnless { ignoreDsl && type.isDsl() }
+            ?.takeUnless { type.isAnnotatedWithAnyOf(ignoredAnnotations) }
             ?.let { type.returnTypeReference }
             ?.getAbbreviatedTypeOrType(bindingContext)
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
-            ?.takeIf { checkFunctionType }
             ?.let {
                 val file = type.containingKtFile
                 val name = type.parent.namedUnwrappedElement?.name ?: type.name ?: "type"
@@ -79,9 +93,10 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         bindingContext.takeIf { it != BindingContext.EMPTY }
+            ?.takeUnless { function.isAnnotatedWithAnyOf(ignoredAnnotations) }
+            ?.takeUnless { function.isMainFunction() }
             ?.get(BindingContext.FUNCTION, function)
             ?.returnType
-            ?.takeUnless { function.isMainFunction() }
             ?.takeIf(KotlinType::isUnitNothingOrVoid)
             ?.let {
                 val file = function.containingKtFile
@@ -95,6 +110,16 @@ class ReturnUnit(config: Config = Config.empty) : Rule(config) {
         super.visitNamedFunction(function)
     }
 }
+
+private fun KtLambdaExpression.isDsl(bindingContext: BindingContext) =
+    getType(bindingContext)
+        ?.let {
+            it.getReceiverTypeFromFunctionType() != null && it.getValueParameterTypesFromFunctionType().isEmpty()
+        }
+        ?: false
+
+private fun KtFunctionType.isDsl() =
+    receiverTypeReference != null && parameters.isEmpty()
 
 private fun KotlinType.isUnitNothingOrVoid(): Boolean =
     isUnit() || isNothingOrNullableNothing() || isVoid()
