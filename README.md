@@ -102,7 +102,16 @@ fun pure(y: Int): Int = y + 1
 
 If you need to ignore/suppress issues reported by this plugin. Just annotate function or class with:
 `@Suppress("RULE")`
-where RULE is just a [supported rule name](#Rules).
+where RULE is just a [supported rule name](#Detected rules).
+
+Example: 
+```kotlin
+@Suppress("ReturnStatement")
+fun add(a:Int, b:Int) {
+    val x  = a+b
+    return x
+}
+```
 
 (This is a standard `detekt` feature).
 
@@ -116,7 +125,7 @@ occasionally.
 ## Releases
 
 version 0.5.0:
- - improved Unit rule
+ - improved Unit rule (thanks @krzykrucz)
 
 version 0.4.0:
 
