@@ -7,9 +7,9 @@ impure language elements in kotlin code.
 
 Rule | Detects | Properties <br /> with defaults | Requires <br /> [type resolution](https://detekt.github.io/detekt/type-resolution.html)
 --- | --- | --- | ---
-LoopUsage | use of `for`, `while` | `active`: true |
+LoopDefinition | use of `for`, `while` | `active`: true |
 ReturnStatement | use of `return` statement | `active`: true |
-VariableUsage | use of `var` | `active`: true |
+VariableDefinition | use of `var` | `active`: true |
 ReturnUnit | use of function returning `Unit`, `Nothing`, `Void`; unless annotated with an annotation which name is specified in `ignoredAnnotations` | `active`: true<br />`ignoreFunctionType`: false<br />`ignoredAnnotations`: []<br />`ignoreDsl`: false | :ballot_box_with_check:
 ClassDefinition | use of object-oriented `class` | `active`: false |
 AbstractClassDefinition | use of object-oriented `abstract class` | `active`: false |
@@ -46,11 +46,11 @@ c) optionally, you can reconfigure plugin by adding this to your custom `detekt.
 ```yaml
 impure:
   active: true
-  LoopUsage:
+  LoopDefinition:
     active: true
   ReturnStatement:
     active: true
-  VariableUsage:
+  VariableDefinition:
     active: true
   ReturnUnit:
     active: true
