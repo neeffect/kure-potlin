@@ -10,9 +10,9 @@ repositories {
     jcenter()
 }
 
-val componentVersion = "0.5.0"
+val componentVersion = "0.6.0"
 val spekVersion = "2.0.15"
-val detektVersion = "1.16.0"
+val detektVersion = "1.18.1"
 
 dependencies {
     compileOnly("io.gitlab.arturbosch.detekt:detekt-api:$detektVersion")
@@ -20,7 +20,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.31")
     testImplementation("io.gitlab.arturbosch.detekt:detekt-api:$detektVersion")
     testImplementation("io.gitlab.arturbosch.detekt:detekt-test:$detektVersion")
-    testImplementation("org.assertj:assertj-core:3.19.0")
+    testImplementation("org.assertj:assertj-core:3.20.2")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
