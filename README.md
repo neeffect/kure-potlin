@@ -29,17 +29,19 @@ repositories {
 }
 
 plugins {
-    id("io.gitlab.arturbosch.detekt").version("1.16.0")
+    id("io.gitlab.arturbosch.detekt").version("1.18.1")
 }
 ```
+(see [Releases](#Releases) for versions supporting older detekt)
 
 b) add dependency
 
 ```kotlin
 dependencies {
-    detektPlugins("pl.setblack:kure-potlin:0.5.0")
+    detektPlugins("pl.setblack:kure-potlin:0.6.0")
 }
 ```
+
 
 c) optionally, you can reconfigure plugin by adding this to your custom `detekt.yaml`:
 
@@ -124,7 +126,9 @@ occasionally.
 
 ## Releases
 
-version 0.5.0:
+version 0.6.0: (detekt 0.18.1)
+
+version 0.5.0: (detekt 0.16.0)
  - improved Unit rule (thanks @krzykrucz)
 
 version 0.4.0:
