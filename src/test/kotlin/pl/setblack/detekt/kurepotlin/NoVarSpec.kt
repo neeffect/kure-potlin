@@ -1,6 +1,5 @@
 package pl.setblack.detekt.kurepotlin
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
