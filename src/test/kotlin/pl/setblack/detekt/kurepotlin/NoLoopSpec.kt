@@ -1,6 +1,5 @@
 package pl.setblack.detekt.kurepotlin
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinEnvironment
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -35,3 +34,5 @@ private const val impureCode: String =
                 }
             }
         """
+
+
