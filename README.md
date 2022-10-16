@@ -126,6 +126,8 @@ occasionally.
 
 ## Releases
 
+version 0.7.0: (detekt 1.21.0)
+
 version 0.6.0: (detekt 0.18.1)
 
 version 0.5.0: (detekt 0.16.0)
